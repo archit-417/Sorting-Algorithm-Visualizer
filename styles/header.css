@@ -48,7 +48,7 @@ header {
     margin-right: 2vw;
 }
 
-#a_generate {
+.new-array {
     background-color: transparent;
     border: none;
     color: white;
@@ -56,13 +56,13 @@ header {
     padding: 8px;
     margin-top: 10px;
     font-size: 1.6vw;
-    transition: font-size 0.15s;
+    transition: transform 0.15s;
 }
 
-#a_generate:hover {
-    color: #588277;
-    padding: 10px;
-    font-size: 1.7vw;
+.new-array:hover {
+    color: #b1e1d4;
+    border-radius: 5px;
+    transform: scale(1.1);
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -83,7 +83,7 @@ header {
 }
 
 .nav-heading:hover {
-    font-size: 3vw;
+    font-size: 2.6vw;
     text-wrap: nowrap;
 }
 
@@ -103,14 +103,13 @@ header {
     outline: none;
     font-size: 1.6vw;
     cursor: pointer;
-    transition: box-shadow 0.15s;
-    transition: font-size 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s;
 }
 
 .algos button:hover {
-    background-color: transparent;
-    color: #588277;
-    font-size: 1.7vw;
+    color: #b1e1d4;
+    transform: scale(1.1);
+    border-radius: 5px;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
 }
 
