@@ -1,4 +1,4 @@
-function Heap()
+function heapSort()
 {
     //Setting Time complexities
     document.getElementById("Time_Worst").innerText="O(N log N)";
@@ -79,13 +79,13 @@ function heap_sort()
     for(var i=array_size-1;i>0;i--)
     {
         swap(0,i);
-        div_update(divs[i],div_sizes[i],"green");//Color update
-        div_update(divs[i],div_sizes[i],"yellow");//Color update
+        div_update(divs[i],div_sizes[i],"c4");//Color update
+        div_update(divs[i],div_sizes[i],"c3");//Color update
 
         max_heapify(i,0);
 
-        div_update(divs[i],div_sizes[i],"#16423C");//Color update
-        div_update(divs[i],div_sizes[i],"green");//Color update
+        div_update(divs[i],div_sizes[i],"#c3");//Color update
+        div_update(divs[i],div_sizes[i],"c4");//Color update
     }
-    div_update(divs[i],div_sizes[i],"green");//Color update
+    div_update(divs[i],div_sizes[i],"c4");//Color update
 }

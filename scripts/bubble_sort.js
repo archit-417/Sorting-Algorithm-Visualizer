@@ -1,4 +1,4 @@
-function Bubble()
+function bubbleSort()
 {
     //Setting Time complexities
     document.getElementById("Time_Worst").innerText="O(N^2)";

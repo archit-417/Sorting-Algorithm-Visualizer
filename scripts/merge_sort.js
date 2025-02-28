@@ -1,4 +1,4 @@
-function Merge()
+function mergeSort()
 {
     //Setting Time complexities
     document.getElementById("Time_Worst").innerText="O(N log N)";

@@ -1,81 +1,222 @@
+// DOM Elements
+const arraySizeSlider = document.getElementById('a_size');
+const sizeValue = document.getElementById('size-value');
+const arraySpeedSlider = document.getElementById('a_speed');
+const speedValue = document.getElementById('speed-value');
+const generateButton = document.getElementById('a_generate');
+const algoButtons = document.querySelectorAll('.algo-btn');
+const arrayContainer = document.getElementById('array_container');
 
-//Variables (THESE MIGHT BE USED IN OTHER JS FILES TOO)
-var inp_as = document.getElementById('a_size');
-var array_size = inp_as.value;
-var inp_gen = document.getElementById("a_generate");
-var inp_aspeed = document.getElementById("a_speed");
+// Time and Space complexity elements
+const timeWorst = document.getElementById('Time_Worst');
+const timeAverage = document.getElementById('Time_Average');
+const timeBest = document.getElementById('Time_Best');
+const spaceWorst = document.getElementById('Space_Worst');
 
-var butts_algos = document.querySelectorAll(".algos button");
+// Variables
+let arraySize = arraySizeSlider.value;
+let sortingSpeed = parseInt(arraySpeedSlider.value);
+const delayFactor = 10000; // Higher number = slower animations
+let array = [];
+let bars = [];
+let activeAlgorithm = '';
 
-var div_sizes = [];
-var divs = [];
-var margin_size = 0.1;
-var cont = document.getElementById("array_container");
-cont.style = "flex-direction:row";
+// Initialize the array
+generateNewArray();
 
-//Four colors used during sorting
-let c1 = "#31473A";
-let c2 = "crimson";
-let c3 = "rgb(3, 103, 218)";
-let c4 = "rgb(6, 100, 42)";
+// Event Listeners
+arraySizeSlider.addEventListener('input', function() {
+    arraySize = this.value;
+    sizeValue.textContent = this.value;
+    generateNewArray();
+});
 
-//Array generation and updation.
-inp_gen.addEventListener("click", generate_array);
-inp_gen.addEventListener("click", enable_NewArray);
-inp_as.addEventListener("input", update_array_size);
+arraySpeedSlider.addEventListener('input', function() {
+    sortingSpeed = parseInt(this.value);
+    speedValue.textContent = this.value;
+});
 
-function generate_array(){
-    cont.innerHTML = "";
+generateButton.addEventListener('click', generateNewArray);
 
-    for(var i=0; i<array_size; i++){
-        div_sizes[i] = Math.floor(Math.random() * 0.5*(inp_as.max - inp_as.min) ) + 10;
-        divs[i] = document.createElement("div");
-        cont.appendChild(divs[i]);
-        divs[i].style = " margin:5% " + margin_size + "%; background-color :"+ c1 +"; width:" 
-        + (100/array_size-(2*margin_size)) + "%; height:" + (div_sizes[i]) + "%;";
-    }    
-}
+// Add click listeners to algorithm buttons
+algoButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        algoButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Set active algorithm
+        activeAlgorithm = this.getAttribute('data-algorithm');
+        
+        // Update complexity information
+        updateAlgorithmInfo(activeAlgorithm);
+        
+        // Run the appropriate algorithm
+        runSelectedAlgorithm();
+    });
+});
 
-function update_array_size(){
-    array_size = inp_as.value;
-    generate_array();
-}
+// Functions
+// function generateNewArray() {
+//     // Clear the array container
+//     arrayContainer.innerHTML = '';
+//     array = [];
+//     bars = [];
+    
+//     // Generate random array
+//     for (let i = 0; i < arraySize; i++) {
+//         array.push(Math.floor(Math.random() * 100) + 1);
+//     }
+    
+//     // Create bars for visualization
+//     for (let i = 0; i < arraySize; i++) {
+//         const bar = document.createElement('div');
+//         bar.classList.add('bar');
+//         bar.style.height = `${array[i] * 3}px`;
+//         bar.style.width = `${100/arraySize-(2)}px`;
+//         bar.style.margin = '0 10px';
+//         arrayContainer.appendChild(bar);
+//         bars.push(bar);
+//     }
+// }
 
-window.onload = update_array_size();
-
-//Running the appropriate algorithm.
-for(var i=0; i<butts_algos.length; i++){
-    butts_algos[i].addEventListener("click", runalgo);
-}
-
-function disable_buttons(){
-    for(var i=0; i<butts_algos.length; i++){
-        butts_algos[i].classList = [];
-        butts_algos[i].classList.add("butt_locked");
-
-        butts_algos[i].disabled = true;
-        inp_as.disabled = true;
-         //TODO: Not disable New Array button
-        inp_aspeed.disabled = true;
+function generateNewArray() {
+    // Clear the array container
+    arrayContainer.innerHTML = '';
+    array = [];
+    bars = [];
+    
+    // Generate random array
+    for (let i = 0; i < arraySize; i++) {
+        array.push(Math.floor(Math.random() * 100) + 1);
+    }
+    
+    // Create bars for visualization - MODIFIED SECTION
+    const barWidth = Math.max(8, 150/arraySize); // Increase minimum width and scale factor
+    const barMargin = Math.max(1, 4/arraySize); // Reduce margins for larger arrays
+    
+    for (let i = 0; i < arraySize; i++) {
+        const bar = document.createElement('div');
+        bar.classList.add('bar');
+        bar.style.height = `${array[i] * 3}px`;
+        bar.style.width = `${barWidth}px`;
+        bar.style.margin = `0 ${barMargin}px`; // Smaller margins
+        arrayContainer.appendChild(bar);
+        bars.push(bar);
     }
 }
 
-function runalgo(){
-    disable_buttons();
- 
-    this.classList.add("butt_selected");
-    switch(this.innerHTML){
-        case "Bubble" : Bubble();
+
+function updateAlgorithmInfo(algorithm) {
+    // Set complexity information based on selected algorithm
+    switch(algorithm) {
+        case 'bubble':
+            timeWorst.textContent = 'O(n²)';
+            timeAverage.textContent = 'O(n²)';
+            timeBest.textContent = 'O(n)';
+            spaceWorst.textContent = 'O(1)';
             break;
-        case "Selection" : Selection_sort();
+        case 'selection':
+            timeWorst.textContent = 'O(n²)';
+            timeAverage.textContent = 'O(n²)';
+            timeBest.textContent = 'O(n²)';
+            spaceWorst.textContent = 'O(1)';
             break;
-        case "Insertion" : Insertion();
+        case 'insertion':
+            timeWorst.textContent = 'O(n²)';
+            timeAverage.textContent = 'O(n²)';
+            timeBest.textContent = 'O(n)';
+            spaceWorst.textContent = 'O(1)';
             break;
-        case "Merge" : Merge();
+        case 'merge':
+            timeWorst.textContent = 'O(n log n)';
+            timeAverage.textContent = 'O(n log n)';
+            timeBest.textContent = 'O(n log n)';
+            spaceWorst.textContent = 'O(n)';
             break;
-        case "Quick" : Quick();
+        case 'quick':
+            timeWorst.textContent = 'O(n²)';
+            timeAverage.textContent = 'O(n log n)';
+            timeBest.textContent = 'O(n log n)';
+            spaceWorst.textContent = 'O(log n)';
             break;
-        case "Heap" : Heap();
+        case 'heap':
+            timeWorst.textContent = 'O(n log n)';
+            timeAverage.textContent = 'O(n log n)';
+            timeBest.textContent = 'O(n log n)';
+            spaceWorst.textContent = 'O(1)';
+            break;
+        default:
+            timeWorst.textContent = '-';
+            timeAverage.textContent = '-';
+            timeBest.textContent = '-';
+            spaceWorst.textContent = '-';
+    }
+}
+
+function runSelectedAlgorithm() {
+    // Disable UI controls during sorting
+    disableControls();
+    
+    switch(activeAlgorithm) {
+        case 'bubble':
+            bubbleSort();
+            break;
+        case 'selection':
+            selectionSort();
+            break;
+        case 'insertion':
+            insertionSort();
+            break;
+        case 'merge':
+            mergeSort();
+            break;
+        case 'quick':
+            quickSort();
+            break;
+        case 'heap':
+            heapSort();
             break;
     }
 }
+
+function disableControls() {
+    // Disable sliders and buttons during sorting
+    arraySizeSlider.disabled = true;
+    arraySpeedSlider.disabled = true;
+    generateButton.disabled = true;
+    algoButtons.forEach(btn => btn.disabled = true);
+}
+
+function enableControls() {
+    // Re-enable controls after sorting is complete
+    arraySizeSlider.disabled = false;
+    arraySpeedSlider.disabled = false;
+    generateButton.disabled = false;
+    algoButtons.forEach(btn => btn.disabled = false);
+}
+
+// Helper visualization functions
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function markBars(indices, className) {
+    for (let i of indices) {
+        bars[i].classList.add(className);
+    }
+}
+
+async function unmarkBars(indices, className) {
+    for (let i of indices) {
+        bars[i].classList.remove(className);
+    }
+}
+
+async function updateBar(index, height) {
+    bars[index].style.height = `${height * 3}px`;
+}
+
+// Note: The actual sorting algorithms will be imported from separate files
+// This is just the main controller file

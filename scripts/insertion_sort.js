@@ -1,4 +1,4 @@
-function Insertion()
+function insertionSort()
 {
     //Setting Time complexities
     document.getElementById("Time_Worst").innerText="O(N^2)";

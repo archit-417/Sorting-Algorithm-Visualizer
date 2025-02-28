@@ -1,4 +1,4 @@
-function Quick()
+function quickSort()
 {
     //Setting Time complexities
     document.getElementById("Time_Worst").innerText="O(N^2)";

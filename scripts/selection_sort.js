@@ -1,4 +1,4 @@
-function Selection_sort()
+function selectionSort()
 {
     //Setting Time complexities
     document.getElementById("Time_Worst").innerText="O(N^2)";
